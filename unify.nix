@@ -68,6 +68,8 @@ in
         modules = ([ ./modules ] ++ modules);
         args = hostConfig.args // {
           inherit hostname hostConfig inputs;
+          pkgs = inputs.nixpkgs.result.${hostConfig.system};
+          pkgslib = inputs.nixpgks.result.lib;
         };
       };
       homeModule =
