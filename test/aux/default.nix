@@ -1,6 +1,6 @@
 _:
 {
-  config.host.unify-test = {
+  config.host.unify-aux-test = {
     nixos = {
       fileSystems."/".device = "x";
       boot.loader.grub.enable = false;

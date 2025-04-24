@@ -53,6 +53,12 @@ in
               description = "User to use for home-manager configuration.";
               type = lib.types.string;
             };
+
+            auxLib = lib.options.create {
+              description = "Use Aux lib for module system (experimental)";
+              type = lib.types.bool;
+              default.value = false;
+            };
           };
         }
 
@@ -64,14 +70,28 @@ in
     hostname: hostConfig:
     let
       modules = lib.listNixFiles (hostConfig.paths ++ hostConfig.extraModules);
-      unified = lib.modules.run {
-        modules = ([ ./modules ] ++ modules);
-        args = hostConfig.args // {
-          inherit hostname hostConfig inputs;
-          pkgs = inputs.nixpkgs.result.${hostConfig.system};
-          pkgslib = inputs.nixpgks.result.lib;
-        };
-      };
+      unifyResult =
+        if hostConfig.auxLib then
+          lib.modules.run {
+            modules = ([ ./modules/aux ] ++ modules);
+            args = hostConfig.args // {
+              inherit hostname hostConfig inputs;
+              pkgs = inputs.nixpkgs.result.${hostConfig.system};
+              pkgslib = inputs.nixpgks.result.lib;
+            };
+          }
+        else
+          hostConfig.nixpkgs.result.lib.evalModules {
+            modules = [
+              (_: {
+                config._module.args = hostConfig.args // {
+                  inherit hostname hostConfig inputs;
+                  pkgs = inputs.nixpkgs.result.${hostConfig.system};
+                };
+              })
+              ./modules/nixpkgs-lib
+            ] ++ modules;
+          };
       homeModule =
         if hostConfig.type == "nixos" then
           inputs.home-manager.result.nixosModules.default
@@ -84,7 +104,7 @@ in
         ++ (lib.mkHostModule {
           inherit hostname;
           inherit (hostConfig) type user;
-          inherit (unified) config;
+          inherit (unifyResult) config;
         });
     in
     {
