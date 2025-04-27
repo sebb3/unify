@@ -83,13 +83,13 @@ in
         else
           hostConfig.nixpkgs.result.lib.evalModules {
             modules = [
-              (_: {
+              {
                 config._module.args = hostConfig.args // {
                   inherit hostname hostConfig;
                   pkgs = inputs.nixpkgs.result.${hostConfig.system};
                   auxLib = lib;
                 };
-              })
+              }
               ./modules/nixpkgs-lib
             ] ++ modules;
           };
