@@ -47,7 +47,13 @@
     if hostConfig.name == hostname then lib.unify hostConfig type else lib.unify hostConfig.shared type;
 
   # Take Unify modules and return modules for system type
-  mkHostModule = { hostname, type, user, config, }: 
+  mkHostModule =
+    {
+      hostname,
+      type,
+      user,
+      config,
+    }:
     let
       hostConfig = lib.attrs.selectOrThrow [ hostname ] config.host;
       homeConfig = {
@@ -55,11 +61,22 @@
       };
     in
     if type == "nixos" then
-      [ config.nixos homeConfig hostConfig.nixos ]
+      [
+        config.nixos
+        homeConfig
+        hostConfig.nixos
+      ]
     else if type == "home-manager" then
-      [ config.home ]
+      [
+        config.home
+        hostConfig.home
+      ]
     else if type == "darwin" then
-      [ config.darwin homeConfig ]
+      [
+        config.darwin
+        homeConfig
+        hostConfig.darwin
+      ]
     else
       throw "${type} is not a valid system type! Valid types are nixos, home-manager, or darwin";
 }
