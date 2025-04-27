@@ -18,20 +18,6 @@ nilla.create (
       };
       modules.unify = ./unify.nix;
       lib = import ./lib.nix { inherit (config) lib; };
-      unify.hosts = {
-        unify-test = {
-          type = "nixos";
-          user = "unify";
-          paths = [ ./test/nixpkgs-lib ];
-          system = "x86_64-linux";
-        };
-        unify-aux-test = {
-          type = "nixos";
-          user = "unify";
-          paths = [ ./test/aux ];
-          system = "x86_64-linux";
-        };
-      };
       shells.default = {
         systems = [
           "x86_64-linux"
