@@ -75,7 +75,7 @@ in
           lib.modules.run {
             modules = ([ ./modules/aux ] ++ modules);
             args = hostConfig.args // {
-              inherit hostname hostConfig inputs;
+              inherit hostname hostConfig;
               pkgs = inputs.nixpkgs.result.${hostConfig.system};
               pkgslib = inputs.nixpgks.result.lib;
             };
@@ -85,7 +85,7 @@ in
             modules = [
               (_: {
                 config._module.args = hostConfig.args // {
-                  inherit hostname hostConfig inputs;
+                  inherit hostname hostConfig;
                   pkgs = inputs.nixpkgs.result.${hostConfig.system};
                 };
               })
