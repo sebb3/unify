@@ -1,12 +1,13 @@
 let
   pins = import ./npins;
   nilla = import pins.nilla;
+  nixos = pins.nixos;
 in
 nilla.create (
   { config }:
   {
     includes = [
-      "${pins.nilla-utils}/modules"
+      "${nixos}/modules/nixos.nix"
       ./unify.nix
     ];
     config = {

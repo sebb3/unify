@@ -16,15 +16,19 @@ in
               default.value = { };
             };
 
-            system = lib.options.create {
-              description = "The host platform";
-              type = lib.types.enum config.loaders.nixpkgs.settings.default.systems;
-            };
+            # system = lib.options.create {
+            #   description = "The host platform";
+            #   type = lib.types.enum config.loaders.nixpkgs.settings.default.systems;
+            # };
 
             nixpkgs = lib.options.create {
               description = "The Nixpkgs input to use.";
               type = lib.types.raw;
-              default.value = if inputs ? nixpkgs then inputs.nixpkgs else null;
+              default.value =
+                if inputs ? nixpkgs && inputs.nixpkgs.result ? x86_64-linux then
+                  inputs.nixpkgs.result.x86_64-linux
+                else
+                  null;
             };
 
             paths = lib.options.create {
@@ -76,17 +80,17 @@ in
             modules = ([ ./modules/aux ] ++ modules);
             args = hostConfig.args // {
               inherit hostname hostConfig;
-              pkgs = inputs.nixpkgs.result.${hostConfig.system};
-              pkgsLib = inputs.nixpgks.result.lib;
+              pkgs = hostConfig.nixpkgs;
+              pkgsLib = hostConfig.nixpkgs.lib;
             };
           }
         else
-          hostConfig.nixpkgs.result.lib.evalModules {
+          hostConfig.nixpkgs.lib.evalModules {
             modules = [
               {
                 config._module.args = hostConfig.args // {
                   inherit hostname hostConfig;
-                  pkgs = inputs.nixpkgs.result.${hostConfig.system};
+                  pkgs = hostConfig.nixpkgs;
                   auxLib = lib;
                 };
               }
@@ -109,7 +113,8 @@ in
         });
     in
     {
-      inherit (hostConfig) nixpkgs system;
+      # inherit (hostConfig) system;
+      pkgs = hostConfig.nixpkgs;
       modules = hostModules;
     }
   ) config.unify.hosts;

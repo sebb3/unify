@@ -26,18 +26,18 @@
       "url": "https://github.com/nilla-nix/nilla/archive/6747fe62879d7d15c96808bc370a52941287772c.tar.gz",
       "hash": "0sg9chk7y8h8sh8647vi0d2liqxa0vnidpd3acs763p6alxnf23y"
     },
-    "nilla-utils": {
+    "nixos": {
       "type": "Git",
       "repository": {
         "type": "GitHub",
-        "owner": "arnarg",
-        "repo": "nilla-utils"
+        "owner": "nilla-nix",
+        "repo": "nixos"
       },
       "branch": "main",
       "submodules": false,
-      "revision": "79c10f2ac836947c5d1e04d2690b5077e93ecf15",
-      "url": "https://github.com/arnarg/nilla-utils/archive/79c10f2ac836947c5d1e04d2690b5077e93ecf15.tar.gz",
-      "hash": "1scmhingig23ms5m778bhg5aaw416pj0h64nnji0a0w75isy723g"
+      "revision": "2d1baf07fd814421a8f4a275287def5ba4e6d9a4",
+      "url": "https://github.com/nilla-nix/nixos/archive/2d1baf07fd814421a8f4a275287def5ba4e6d9a4.tar.gz",
+      "hash": "0f06spp06f2q5gd5b0fxjqvs1yq7x8garf9mr518k8wbx37g48wh"
     },
     "nixpkgs": {
       "type": "Git",
