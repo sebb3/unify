@@ -77,7 +77,7 @@ in
             args = hostConfig.args // {
               inherit hostname hostConfig;
               pkgs = inputs.nixpkgs.result.${hostConfig.system};
-              pkgslib = inputs.nixpgks.result.lib;
+              pkgsLib = inputs.nixpgks.result.lib;
             };
           }
         else
@@ -87,6 +87,7 @@ in
                 config._module.args = hostConfig.args // {
                   inherit hostname hostConfig;
                   pkgs = inputs.nixpkgs.result.${hostConfig.system};
+                  auxLib = lib;
                 };
               })
               ./modules/nixpkgs-lib
