@@ -2,7 +2,7 @@
 {
   options = {
     hostOptions = lib.mkOption {
-      type = lib.types.attrsOf lib.types.any;
+      type = lib.types.attrs;
       default = { };
       description = "Additional options for each host";
     };
