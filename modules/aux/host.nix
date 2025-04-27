@@ -1,4 +1,4 @@
-{ lib, options }:
+{ lib, options, config }:
 {
   options = {
     hostOptions = lib.options.create {
@@ -26,7 +26,7 @@
                 type = lib.types.list.of lib.types.string;
                 default.value = [ ];
               };
-            } // options.hostOptions;
+            } // config.hostOptions;
           }
         )
       );
