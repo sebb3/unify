@@ -27,11 +27,12 @@
           else
             { };
       in
-      lib.mkMerge [
-        config.args
-        host
-        osConfig
-        homeConfig
-      ];
+      {
+        inherit
+          host
+          osConfig
+          homeConfig
+          ;
+      } // config.args;
   };
 }
