@@ -25,15 +25,19 @@
         flakeModules.unify = ./modules;
         flakeModules.default = ./modules;
       };
-      partitionedAttrs.nixosConfigurations = "tests";
+      partitionedAttrs = {
+        nixosConfigurations = "tests";
+        nixosModules = "tests";
+        homeManagerModules = "tests";
+      };
       partitions.tests = {
         extraInputsFlake = ./test;
         module =
-          { inputs, config, ... }:
+          { inputs, ... }:
           {
             imports = [
-              config.flakeModule
-              (inputs.import-tree ./test)
+              ./modules
+              (inputs.import-tree ./test/modules)
             ];
           };
       };

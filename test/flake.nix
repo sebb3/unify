@@ -1,1 +1,4 @@
-{ inputs.import-tree.url = "github:vic/import-tree"; }
+{
+  inputs.import-tree.url = "github:vic/import-tree";
+  outputs = { ... }: { };
+}
