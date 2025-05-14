@@ -48,7 +48,7 @@ in
         homeManagerModules = unify-lib.collectHomeModules filteredModules;
         specialArgs = {
           inherit (hostConfig) tags;
-          inherit hostConfig;
+          inherit hostConfig hostname;
         } // hostConfig.args;
       in
       inputs.nixpkgs.lib.nixosSystem {
