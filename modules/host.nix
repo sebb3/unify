@@ -58,8 +58,6 @@ in
           config.unify.nixos
           inputs.home-manager.nixosModules.default
           {
-            home-manager.useUserPackages = true;
-            home-manager.useGlobalPkgs = true;
             home-manager.extraSpecialArgs = specialArgs;
             home-manager.users.${hostConfig.user}.imports = homeManagerModules ++ [
               hostConfig.home
