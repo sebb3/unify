@@ -1,4 +1,9 @@
-{ lib, unify-lib, ... }:
+{
+  lib,
+  unify-lib,
+  config,
+  ...
+}:
 let
   inherit (lib) mkOption types;
   nixos = unify-lib.nixosModuleType;
@@ -23,6 +28,18 @@ in
           }
         )
       );
+    };
+  };
+  config.flake = {
+    nixosModules = lib.mapAttrs (moduleName: moduleConfig: {
+      imports = [ moduleConfig.nixos.imports ];
+    }) config.unify.modules // {
+      default.imports = config.unify.nixos.imports;
+    };
+    homeModules = lib.mapAttrs (moduleName: moduleConfig: {
+      imports = [ moduleConfig.home.imports ];
+    }) config.unify.modules // {
+      default.imports = config.unify.home.imports;
     };
   };
 }
