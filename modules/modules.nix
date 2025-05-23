@@ -30,13 +30,13 @@ in
       );
     };
   };
-  config.flake = {
-    nixosModules = lib.mapAttrs (moduleName: moduleConfig: {
+  config.flake.modules = {
+    nixos = lib.mapAttrs (moduleName: moduleConfig: {
       imports = [ moduleConfig.nixos.imports ];
     }) config.unify.modules // {
       default.imports = config.unify.nixos.imports;
     };
-    homeModules = lib.mapAttrs (moduleName: moduleConfig: {
+    home = lib.mapAttrs (moduleName: moduleConfig: {
       imports = [ moduleConfig.home.imports ];
     }) config.unify.modules // {
       default.imports = config.unify.home.imports;
