@@ -4,7 +4,7 @@ let
 in
 {
   imports = [
-    ./host.nix
+    ./nixos.nix
     ./modules.nix
     ./lib.nix
   ];

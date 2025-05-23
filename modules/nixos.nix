@@ -9,7 +9,7 @@ let
   inherit (lib) mkOption types;
 in
 {
-  options.unify.hosts = mkOption {
+  options.unify.hosts.nixos = mkOption {
     type = types.attrsOf (
       types.submodule (
         { name, ... }:
