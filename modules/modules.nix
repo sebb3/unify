@@ -14,32 +14,28 @@ in
     inherit nixos home;
     modules = mkOption {
       type = types.lazyAttrsOf (
-        types.submodule (
-          { name, ... }:
-          {
-            options = {
-              inherit nixos home;
-              tag = mkOption {
-                default = name;
-                readOnly = true;
-                description = "Modules will be applied to hosts with this tag";
-              };
-            };
-          }
-        )
+        types.submodule ({
+          options = {
+            inherit nixos home;
+          };
+        })
       );
     };
   };
   config.flake.modules = {
-    nixos = lib.mapAttrs (moduleName: moduleConfig: {
-      imports = [ moduleConfig.nixos.imports ];
-    }) config.unify.modules // {
-      default.imports = config.unify.nixos.imports;
-    };
-    home = lib.mapAttrs (moduleName: moduleConfig: {
-      imports = [ moduleConfig.home.imports ];
-    }) config.unify.modules // {
-      default.imports = config.unify.home.imports;
-    };
+    nixos =
+      lib.mapAttrs (moduleName: moduleConfig: {
+        imports = [ moduleConfig.nixos.imports ];
+      }) config.unify.modules
+      // {
+        default.imports = config.unify.nixos.imports;
+      };
+    home =
+      lib.mapAttrs (moduleName: moduleConfig: {
+        imports = [ moduleConfig.home.imports ];
+      }) config.unify.modules
+      // {
+        default.imports = config.unify.home.imports;
+      };
   };
 }

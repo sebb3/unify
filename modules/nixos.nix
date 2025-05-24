@@ -13,23 +13,33 @@ in
     type = types.attrsOf (
       types.submodule (
         { name, ... }:
+        let
+          modules = mkOption {
+            type = types.listOf (types.submodule {
+              options = {
+                nixos = unify-lib.nixosModuleType;
+                home = unify-lib.nixosModuleType;
+              };
+            });
+            default = [ ];
+          };
+        in
         {
           options = config.unify.options // {
+            inherit modules;
             name = mkOption {
               default = name;
               readOnly = true;
             };
-            user = mkOption {
-              type = types.str;
-              default = config.unify.user;
+            users = mkOption {
+              type = types.lazyAttrsOf (types.submodule {
+                options = { inherit modules; };
+              });
+              default = { };
             };
             args = mkOption {
               type = types.lazyAttrsOf types.raw;
               default = { };
-            };
-            tags = mkOption {
-              type = types.listOf types.str;
-              default = [ ];
             };
             nixos = unify-lib.nixosModuleType;
             home = unify-lib.nixosModuleType;
@@ -43,29 +53,32 @@ in
     flake.nixosConfigurations = lib.mapAttrs (
       hostname: hostConfig:
       let
-        filteredModules = unify-lib.filterUnifyModules hostConfig.tags;
-        nixosModules = unify-lib.collectNixosModules filteredModules;
-        homeManagerModules = unify-lib.collectHomeModules filteredModules;
+        nixosModules = (unify-lib.collectNixosModules hostConfig.modules) ++ [
+          config.unify.nixos
+          hostConfig.nixos
+        ];
+        homeModules = (unify-lib.collectHomeModules hostConfig.modules) ++ [
+          config.unify.home
+          hostConfig.home
+        ];
+
+        users = lib.mapAttrs (_: v: { imports = (unify-lib.collectHomeModules v.modules) ++ homeModules; }) hostConfig.users;
+
         specialArgs = {
-          inherit (hostConfig) tags;
           inherit hostConfig;
         } // hostConfig.args;
+
       in
       inputs.nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules = nixosModules ++ [
-          hostConfig.nixos
-          config.unify.nixos
           inputs.home-manager.nixosModules.default
           {
             home-manager.extraSpecialArgs = specialArgs;
-            home-manager.users.${hostConfig.user}.imports = homeManagerModules ++ [
-              hostConfig.home
-              config.unify.home
-            ];
+            home-manager.users = users;
           }
         ];
       }
-    ) config.unify.hosts;
+    ) config.unify.hosts.nixos;
   };
 }
