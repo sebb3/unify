@@ -1,7 +1,14 @@
 { config, ... }:
 {
   unify.hosts.nixos.test = {
-    users.quasi.modules = config.unify.hosts.nixos.test.modules;
+    users = {
+      quasi = {
+        inherit (config.unify.hosts.nixos.test) modules;
+        home = {
+          home.file.test.text = "test!";
+        };
+      };
+    };
     modules = [
       config.unify.modules.shell
     ];

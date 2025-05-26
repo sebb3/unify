@@ -36,7 +36,10 @@ in
             users = mkOption {
               type = types.lazyAttrsOf (
                 types.submodule {
-                  options = { inherit modules; };
+                  options = {
+                    inherit modules;
+                    home = unify-lib.moduleType "User-specific home-manager configuration";
+                  };
                 }
               );
               default = { };
@@ -46,7 +49,7 @@ in
               default = { };
             };
             nixos = unify-lib.moduleType "Host-specific NixOS configuration";
-            home = unify-lib.moduleType "Host-specific home-manager configuration";
+            home = unify-lib.moduleType "Host-specific home-manager configuration, applied to all users for host.";
           };
         }
       )
@@ -67,7 +70,7 @@ in
         ];
 
         users = lib.mapAttrs (_: v: {
-          imports = (unify-lib.collectHomeModules v.modules) ++ homeModules;
+          imports = (unify-lib.collectHomeModules v.modules) ++ v.home.imports ++ homeModules;
         }) hostConfig.users;
 
         specialArgs = {
