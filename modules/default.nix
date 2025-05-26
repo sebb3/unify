@@ -9,7 +9,6 @@ in
     ./lib.nix
   ];
   options.unify = {
-    user = mkOption { type = lib.types.str; };
     options = mkOption {
       type = types.lazyAttrsOf types.raw;
       default = { };
