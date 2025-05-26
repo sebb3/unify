@@ -6,19 +6,19 @@
 }:
 let
   inherit (lib) mkOption types;
-  nixos = unify-lib.nixosModuleType;
-  home = unify-lib.homeModuleType;
 in
 {
   options.unify = {
-    inherit nixos home;
+    nixos = unify-lib.moduleType "Global NixOS configuration";
+    home = unify-lib.moduleType "Global Home-Manager configuration";
     modules = mkOption {
       type = types.lazyAttrsOf (
-        types.submodule ({
+        types.submodule {
           options = {
-            inherit nixos home;
+            nixos = unify-lib.moduleType "A NixOS module";
+            home = unify-lib.moduleType "A Home-Manager module";
           };
-        })
+        }
       );
     };
   };

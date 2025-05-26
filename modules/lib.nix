@@ -11,10 +11,7 @@ let
 in
 {
   _module.args.unify-lib = {
-
-    nixosModuleType = moduleType "A NixOS module";
-    homeModuleType = moduleType "A home-manager module";
-    darwinModuleType = moduleType "A nix-darwin module";
+    inherit moduleType;
 
     # Returns list of nixosModules
     collectNixosModules = modules: lib.fold (v: acc: acc ++ v.nixos.imports) [ ] modules;

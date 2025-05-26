@@ -15,12 +15,14 @@ in
         { name, ... }:
         let
           modules = mkOption {
-            type = types.listOf (types.submodule {
-              options = {
-                nixos = unify-lib.nixosModuleType;
-                home = unify-lib.nixosModuleType;
-              };
-            });
+            type = types.listOf (
+              types.submodule {
+                options = {
+                  nixos = unify-lib.moduleType "A NixOS module";
+                  home = unify-lib.moduleType "A Home-Manager module";
+                };
+              }
+            );
             default = [ ];
           };
         in
@@ -32,17 +34,19 @@ in
               readOnly = true;
             };
             users = mkOption {
-              type = types.lazyAttrsOf (types.submodule {
-                options = { inherit modules; };
-              });
+              type = types.lazyAttrsOf (
+                types.submodule {
+                  options = { inherit modules; };
+                }
+              );
               default = { };
             };
             args = mkOption {
               type = types.lazyAttrsOf types.raw;
               default = { };
             };
-            nixos = unify-lib.nixosModuleType;
-            home = unify-lib.nixosModuleType;
+            nixos = unify-lib.moduleType "Host-specific NixOS configuration";
+            home = unify-lib.moduleType "Host-specific home-manager configuration";
           };
         }
       )
@@ -62,7 +66,9 @@ in
           hostConfig.home
         ];
 
-        users = lib.mapAttrs (_: v: { imports = (unify-lib.collectHomeModules v.modules) ++ homeModules; }) hostConfig.users;
+        users = lib.mapAttrs (_: v: {
+          imports = (unify-lib.collectHomeModules v.modules) ++ homeModules;
+        }) hostConfig.users;
 
         specialArgs = {
           inherit hostConfig;
