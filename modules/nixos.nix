@@ -62,9 +62,10 @@ in
       let
         nixosModules = (unify-lib.collectNixosModules hostConfig.modules) ++ [
           config.unify.nixos
-          hostConfig.nixos
+          hostConfig.nixos.imports
         ];
-        homeModules = (unify-lib.collectHomeModules hostConfig.modules) ++ [
+
+        homeModules = [
           config.unify.home
           hostConfig.home
         ];
