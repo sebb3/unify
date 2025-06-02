@@ -60,10 +60,10 @@ in
     flake.nixosConfigurations = lib.mapAttrs (
       hostname: hostConfig:
       let
-        nixosModules = (unify-lib.collectNixosModules hostConfig.modules) ++ [
-          config.unify.nixos
-          hostConfig.nixos.imports
-        ];
+        nixosModules =
+          (unify-lib.collectNixosModules hostConfig.modules)
+          ++ [ config.unify.nixos ]
+          ++ hostConfig.nixos.imports;
 
         homeModules = [
           config.unify.home
