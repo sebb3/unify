@@ -1,9 +1,16 @@
+{ config, ... }:
 {
-  unify.hosts.test = {
-    user = "quasi";
-    tags = [
-      "default"
-      "shell"
+  unify.hosts.nixos.test = {
+    users = {
+      quasi = {
+        inherit (config.unify.hosts.nixos.test) modules;
+        home = {
+          home.file.test.text = "test!";
+        };
+      };
+    };
+    modules = [
+      config.unify.modules.shell
     ];
     displays.DP-1 = {
       primary = true;
