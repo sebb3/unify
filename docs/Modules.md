@@ -2,7 +2,7 @@
 
 Modules are reusable parts of a Nix configuration. Unify provides options to simplify writing modules. Here is an example of a file that contains a NixOS and Home-Manager module configuring COSMIC DE.
 
-```
+``` nix
 {
   unify.modules.cosmic = {
     home =
