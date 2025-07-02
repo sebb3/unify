@@ -24,16 +24,12 @@ in
   };
   config.flake.modules = {
     nixos =
-      lib.mapAttrs (moduleName: moduleConfig: {
-        imports = [ moduleConfig.nixos.imports ];
-      }) config.unify.modules
+      lib.mapAttrs (moduleName: moduleConfig: moduleConfig.nixos) config.unify.modules
       // {
         default.imports = config.unify.nixos.imports;
       };
     home =
-      lib.mapAttrs (moduleName: moduleConfig: {
-        imports = [ moduleConfig.home.imports ];
-      }) config.unify.modules
+      lib.mapAttrs (moduleName: moduleConfig: moduleConfig.home) config.unify.modules
       // {
         default.imports = config.unify.home.imports;
       };
