@@ -9,7 +9,7 @@ Unify is a Nix library designed to help you define hosts by following a pattern 
 Files allow you to define named NixOS and Home-Manager modules and hosts that import these modules. 
 
 ## Getting started
-The following example `flake.nix` is all you need before starting to create your [[Modules]] and [[Hosts]]. `import-tree` is used to import every \*.nix file in the `./modules` directory.
+The following example `flake.nix` is all you need before starting to create your [modules](Modules.md) and [hosts](Hosts.md). `import-tree` is used to import every \*.nix file in the `./modules` directory.
 
 ```nix
   inputs = {
@@ -39,4 +39,4 @@ The following example `flake.nix` is all you need before starting to create your
     };
 ```
 
-Next: [[Modules.md]]
+Next: [Modules.md](Modules.md)

@@ -1,5 +1,5 @@
 # Hosts
-Unify provides options to define hosts and choose which [[modules]] they will import. Here is very simple example of a file configuring a NixOS host.
+Unify provides options to define hosts and choose which [modules](Modules.md) they will import. Here is very simple example of a file configuring a NixOS host.
 
 ``` nix
 { inputs, config }:

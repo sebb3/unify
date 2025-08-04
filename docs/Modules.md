@@ -36,4 +36,4 @@ Unify also supports an unnamed module that will be imported by all hosts and use
 
 Modules defined by unify will also be added to your flake outputs, allowing them to be reused by other flakes. 
 
-Next: [[Hosts.md]]
+Next: [Hosts.md](Hosts.md)
