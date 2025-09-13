@@ -28,7 +28,7 @@ in
       // {
         default.imports = config.unify.nixos.imports;
       };
-    home =
+    homeManager =
       lib.mapAttrs (moduleName: moduleConfig: moduleConfig.home) config.unify.modules
       // {
         default.imports = config.unify.home.imports;
