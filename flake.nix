@@ -5,11 +5,11 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
+    nix-darwin.url = "github:nix-darwin/nix-darwin";
   };
 
-  outputs =
-    inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
+  outputs = inputs @ {flake-parts, ...}:
+    flake-parts.lib.mkFlake {inherit inputs;} {
       debug = true;
       imports = [
         flake-parts.flakeModules.flakeModules
@@ -20,6 +20,8 @@
       systems = [
         "x86_64-linux"
         "aarch64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
       ];
       flake = {
         flakeModules.unify = ./modules;
@@ -29,17 +31,16 @@
         nixosConfigurations = "tests";
         nixosModules = "tests";
         homeManagerModules = "tests";
+        darwinModules = "tests";
       };
       partitions.tests = {
         extraInputsFlake = ./test;
-        module =
-          { inputs, ... }:
-          {
-            imports = [
-              ./modules
-              (inputs.import-tree ./test/modules)
-            ];
-          };
+        module = {inputs, ...}: {
+          imports = [
+            ./modules
+            (inputs.import-tree ./test/modules)
+          ];
+        };
       };
     };
 }
