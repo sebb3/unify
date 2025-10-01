@@ -20,6 +20,7 @@ in
                 options = {
                   nixos = unify-lib.moduleType "A NixOS module";
                   home = unify-lib.moduleType "A Home-Manager module";
+                  darwin = unify-lib.moduleType "A Darwin module";
                 };
               }
             );

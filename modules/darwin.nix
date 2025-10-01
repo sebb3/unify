@@ -15,11 +15,13 @@ in
         { name, ... }:
         let
           modules = mkOption {
+
             type = types.listOf (
               types.submodule {
                 options = {
                   darwin = unify-lib.moduleType "A Darwin module";
                   home = unify-lib.moduleType "A Home-Manager module";
+                  nixos = unify-lib.moduleType "Nixos modules (will be dropped)";
                 };
               }
             );

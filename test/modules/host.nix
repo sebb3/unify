@@ -1,5 +1,17 @@
 { config, ... }:
 {
+unify.hosts.darwin.test2 = {
+    modules = [ config.unify.modules.shell];
+    users = {
+        sebbe = {
+            inherit (config.unify.hosts.darwin.test2) modules;
+        };
+    };
+    darwin = {
+        networking.hostName = "test";
+    };
+};
+
   unify.hosts.nixos.test = {
     users = {
       quasi = {

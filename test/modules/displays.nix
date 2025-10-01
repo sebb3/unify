@@ -5,6 +5,7 @@ in
 {
   unify.options = {
     displays = lib.mkOption {
+        default = {};
       type = types.attrsOf (
         types.submodule (
           { name, config, ... }:

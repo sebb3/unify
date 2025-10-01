@@ -11,7 +11,9 @@
     home = {
       home.stateVersion = "22.05";
     };
+    darwin = {};
     modules.shell = {
+      darwin.programs.fish.enable = true;
       nixos.programs.fish.enable = true;
       home.programs = {
         fish.enable = true;
