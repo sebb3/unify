@@ -2,6 +2,7 @@
   lib,
   config,
   inputs,
+  withSystem,
   unify-lib,
   ...
 }:
@@ -59,7 +60,8 @@ in
   };
 
   config = {
-    flake.darwinConfigurations = lib.mapAttrs (
+    flake.darwinConfigurations =
+    lib.mapAttrs (
       hostname: hostConfig:
       let
         darwinModules =
@@ -81,16 +83,19 @@ in
         }
         // hostConfig.args;
       in
-      inputs.nix-darwin.lib.darwinSystem {
-        inherit specialArgs;
-        modules = darwinModules ++ [
-          inputs.home-manager.darwinModules.home-manager
-          {
-            home-manager.extraSpecialArgs = specialArgs;
-            home-manager.users = users;
-          }
-        ];
-      }
-    ) config.unify.hosts.darwin;
+      withSystem "aarch64-darwin" (
+        args:
+        inputs.nix-darwin.lib.darwinSystem {
+            pkgs = args.final;
+            inherit specialArgs;
+            modules = darwinModules ++ [
+            inputs.home-manager.darwinModules.home-manager
+            {
+                home-manager.extraSpecialArgs = specialArgs;
+                home-manager.users = users;
+            }
+            ];
+        }
+    )) config.unify.hosts.darwin;
   };
 }
