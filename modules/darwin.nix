@@ -4,13 +4,16 @@
   inputs,
   unify-lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkOption types;
-in {
+in
+{
   options.unify.hosts.darwin = mkOption {
     type = types.attrsOf (
       types.submodule (
-        {name, ...}: let
+        { name, ... }:
+        let
           modules = mkOption {
             type = types.listOf (
               types.submodule {
@@ -20,79 +23,72 @@ in {
                 };
               }
             );
-            default = [];
+            default = [ ];
           };
-        in {
-          options =
-            config.unify.options
-            // {
-              inherit modules;
-              name = mkOption {
-                default = name;
-                readOnly = true;
-              };
-              users = mkOption {
-                type = types.lazyAttrsOf (
-                  types.submodule {
-                    options = {
-                      inherit modules;
-                      home = unify-lib.moduleType "User-specific home-manager configuration";
-                    };
-                  }
-                );
-                default = {};
-              };
-              args = mkOption {
-                type = types.lazyAttrsOf types.raw;
-                default = {};
-              };
-              darwin = unify-lib.moduleType "Host-specific Darwin configuration";
-              home = unify-lib.moduleType "Host-specific home-manager configuration, applied to all users for host.";
+        in
+        {
+          options = config.unify.options // {
+            inherit modules;
+            name = mkOption {
+              default = name;
+              readOnly = true;
             };
+            users = mkOption {
+              type = types.lazyAttrsOf (
+                types.submodule {
+                  options = {
+                    inherit modules;
+                    home = unify-lib.moduleType "User-specific home-manager configuration";
+                  };
+                }
+              );
+              default = { };
+            };
+            args = mkOption {
+              type = types.lazyAttrsOf types.raw;
+              default = { };
+            };
+            darwin = unify-lib.moduleType "Host-specific Darwin configuration";
+            home = unify-lib.moduleType "Host-specific home-manager configuration, applied to all users for host.";
+          };
         }
       )
     );
   };
 
   config = {
-    flake.darwinConfigurations =
-      lib.mapAttrs (
-        hostname: hostConfig: let
-          darwinModules =
-            (unify-lib.collectDarwinModules hostConfig.modules)
-            ++ [config.unify.darwin]
-            ++ hostConfig.darwin.imports;
+    flake.darwinConfigurations = lib.mapAttrs (
+      hostname: hostConfig:
+      let
+        darwinModules =
+          (unify-lib.collectDarwinModules hostConfig.modules)
+          ++ [ config.unify.darwin ]
+          ++ hostConfig.darwin.imports;
 
-          homeModules = [
-            config.unify.home
-            hostConfig.home
-          ];
+        homeModules = [
+          config.unify.home
+          hostConfig.home
+        ];
 
-          users =
-            lib.mapAttrs (_: v: {
-              imports = (unify-lib.collectHomeModules v.modules) ++ v.home.imports ++ homeModules;
-            })
-            hostConfig.users;
+        users = lib.mapAttrs (_: v: {
+          imports = (unify-lib.collectHomeModules v.modules) ++ v.home.imports ++ homeModules;
+        }) hostConfig.users;
 
-          specialArgs =
-            {
-              inherit hostConfig;
-            }
-            // hostConfig.args;
-        in
-          inputs.nix-darwin.lib.darwinSystem {
-            inherit specialArgs;
-            modules =
-              darwinModules
-              ++ [
-                inputs.home-manager.darwinModules.home-manager
-                {
-                  home-manager.extraSpecialArgs = specialArgs;
-                  home-manager.users = users;
-                }
-              ];
+        specialArgs = {
+          inherit hostConfig;
+        }
+        // hostConfig.args;
+      in
+      inputs.nix-darwin.lib.darwinSystem {
+        inherit specialArgs;
+        modules = darwinModules ++ [
+          inputs.home-manager.darwinModules.home-manager
+          {
+            home-manager.extraSpecialArgs = specialArgs;
+            home-manager.users = users;
           }
-      )
-      config.unify.hosts.darwin;
+        ];
+      }
+    ) config.unify.hosts.darwin;
   };
 }

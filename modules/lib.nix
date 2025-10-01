@@ -2,25 +2,27 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   inherit (lib) mkOption types;
-  moduleType = description:
+  moduleType =
+    description:
     mkOption {
       type = types.deferredModule;
-      default = {};
       inherit description;
     };
-in {
+in
+{
   _module.args.unify-lib = {
     inherit moduleType;
 
     # Returns list of nixosModules
-    collectNixosModules = modules: lib.fold (v: acc: acc ++ v.nixos.imports) [] modules;
+    collectNixosModules = modules: lib.fold (v: acc: acc ++ v.nixos.imports) [ ] modules;
 
     # Returns list of darwinModules
-    collectDarwinModules = modules: lib.fold (v: acc: acc ++ v.darwin.imports) [] modules;
+    collectDarwinModules = modules: lib.fold (v: acc: acc ++ v.darwin.imports) [ ] modules;
 
     # Returns list of homeManagerModules
-    collectHomeModules = modules: lib.fold (v: acc: acc ++ v.home.imports) [] modules;
+    collectHomeModules = modules: lib.fold (v: acc: acc ++ v.home.imports) [ ] modules;
   };
 }
