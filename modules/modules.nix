@@ -9,14 +9,14 @@ in {
   options.unify = {
     nixos = unify-lib.moduleType "Global NixOS configuration";
     home = unify-lib.moduleType "Global Home-Manager configuration";
-    darwin = unify-lib.modulesType "Global Darwin configuration";
+    darwin = unify-lib.moduleType "Global Darwin configuration";
     modules = mkOption {
       type = types.lazyAttrsOf (
         types.submodule {
           options = {
             nixos = unify-lib.moduleType "A NixOS module";
             home = unify-lib.moduleType "A Home-Manager module";
-            darwin = unify-lib.modulesType "A Darwin module";
+            darwin = unify-lib.moduleType "A Darwin module";
           };
         }
       );
