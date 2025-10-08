@@ -11,6 +11,7 @@ let
 in
 {
   options.unify.hosts.darwin = mkOption {
+    default = {};
     type = types.attrsOf (
       types.submodule (
         { name, ... }:

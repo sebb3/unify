@@ -10,6 +10,7 @@ let
 in
 {
   options.unify.hosts.nixos = mkOption {
+    default = {};
     type = types.attrsOf (
       types.submodule (
         { name, ... }:

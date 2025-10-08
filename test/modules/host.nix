@@ -5,12 +5,8 @@ unify.hosts.darwin.test2 = {
     users = {
         sebbe = {
             inherit (config.unify.hosts.darwin.test2) modules;
-            home = {
-                home.file.test.text = "test!";
-            };
         };
     };
-    home = {};
     darwin = {
         networking.hostName = "test";
         home-manager.useGlobalPkgs = true;

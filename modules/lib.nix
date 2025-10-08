@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   ...
 }:
 let
@@ -9,6 +8,7 @@ let
     description:
     mkOption {
       type = types.deferredModule;
+      default = {};
       inherit description;
     };
 in
