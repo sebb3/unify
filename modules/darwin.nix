@@ -85,9 +85,9 @@ in
         // hostConfig.args;
       in
       withSystem "aarch64-darwin" (
-        args:
+        {pkgs, ...}:
         inputs.nix-darwin.lib.darwinSystem {
-            pkgs = args.final;
+            inherit pkgs;
             inherit specialArgs;
             modules = darwinModules ++ [
             inputs.home-manager.darwinModules.home-manager
